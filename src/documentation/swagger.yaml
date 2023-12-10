@@ -1,0 +1,102 @@
+openapi: 3.1.0
+
+info:
+  title: Digital wallet api
+  description: Backend for digital wallet app
+  version: 1.0.0
+  contact:
+    name: Raj kavankar
+    email: rajkavankar@gmail.com
+
+tags:
+  - name: Users
+    description: Users related opersations
+
+servers:
+  - url: http://localhost:5000/api/v1
+    description: development server
+
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+    cookieAuth:
+      type: apiKey
+      name: token
+      in: cookie
+
+  responses:
+    "401":
+      description: Unaurhorized access error
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              success:
+                type: boolean
+                example: false
+              message:
+                type: string
+                example: Unaurhorized access
+    "500":
+      description: Internal server error
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              success:
+                type: boolean
+                example: false
+              message:
+                type: string
+                example: Something went wrong
+
+  schemas:
+    User:
+      type: object
+      required:
+        - name
+        - phone
+      properties:
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+        name:
+          type: string
+        phone:
+          type: string
+
+paths:
+  /auth:
+    post:
+      summary: Registering or logging in an user
+      description: Registering or logging in an user
+      tags:
+        - Users
+      requestBody:
+        description: Getting user detals
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: "#/components/schemas/User"
+      responses:
+        "200":
+          description: Success response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: true
+                  user:
+                    $ref: "#/components/schemas/User"
+        "500":
+          $ref: "#/components/responses/500"
