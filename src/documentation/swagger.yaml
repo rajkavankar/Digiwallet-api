@@ -28,6 +28,19 @@ components:
       in: cookie
 
   responses:
+    "400":
+      description: Bad request error
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              success:
+                type: boolean
+                example: false
+              message:
+                type: string
+                example: Bad request
     "401":
       description: Unaurhorized access error
       content:
@@ -60,7 +73,7 @@ components:
       type: object
       required:
         - name
-        - phone
+        - email
       properties:
         id:
           type: string
@@ -68,11 +81,27 @@ components:
           readOnly: true
         name:
           type: string
-        phone:
+        email:
           type: string
+          format: email
+        isActivated:
+          type: boolean
+          example: false
+          readOnly: true
+        avatar:
+          type: string
+          format: binary
+        createdAt:
+          type: string
+          format: date-time
+          readOnly: true
+        updatedAt:
+          type: string
+          format: date-time
+          readOnly: true
 
 paths:
-  /auth:
+  /auth/get-otp:
     post:
       summary: Registering or logging in an user
       description: Registering or logging in an user
@@ -98,5 +127,7 @@ paths:
                     example: true
                   user:
                     $ref: "#/components/schemas/User"
+        "400":
+          $ref: "#/components/responses/400"
         "500":
           $ref: "#/components/responses/500"

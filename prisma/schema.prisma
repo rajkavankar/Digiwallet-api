@@ -7,8 +7,18 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+model Credentails {
+  id          String   @id @default(cuid())
+  email       String   @unique @db.VarChar(255)
+  isActivated Boolean  @default(false)
+  createdAt   DateTime @default(now())
+  User        User?
+}
+
 model User {
-  id    String @id @default(cuid())
-  name  String @db.VarChar(255)
-  phone String @unique @db.VarChar(255)
+  id          String      @id @unique @default(cuid())
+  name        String      @db.VarChar(255)
+  credentails Credentails @relation(fields: [email], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  email       String      @unique @db.VarChar(255)
+  createAt    DateTime    @default(now())
 }

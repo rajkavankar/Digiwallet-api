@@ -1,10 +1,23 @@
 import { z } from "zod"
 
-export const userSchema = z.object({
-  name: z.string({
-    required_error: "Name is requred",
+export const getOtpSchema = z.object({
+  email: z
+    .string({
+      required_error: "Email is required",
+    })
+    .email({ message: "Enter a valid email" }),
+})
+
+export const verifyOtpSchema = z.object({
+  email: z
+    .string({
+      required_error: "Email is missing",
+    })
+    .email({ message: "Enter a valid email" }),
+  hash: z.string({
+    required_error: "hash is missing",
   }),
-  phone: z.string({
-    required_error: "Phone no is requred",
+  otp: z.string({
+    required_error: "Otp is missing",
   }),
 })
